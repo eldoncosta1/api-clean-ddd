@@ -1,8 +1,10 @@
+import { ResultError } from '@/core/result'
 import { makeAnswer } from 'test/factories/make-answer'
 import { makeQuestion } from 'test/factories/make-question'
 import { InMemoryAnswersRepository } from 'test/repositories/in-memory-answers-repository'
 import { InMemoryQuestionsRepository } from 'test/repositories/in-memory-questions-repository'
 import { ChooseQuestionBestAnswerUseCase } from './choose-question-best-answer'
+import { NotAllowedError } from './errors/not-allowed-error'
 
 let inMemoryAnswersRepository: InMemoryAnswersRepository
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository
@@ -44,12 +46,12 @@ describe('Choose Question Best Answer Usecase', () => {
     await inMemoryQuestionsRepository.create(question)
     await inMemoryAnswersRepository.create(answer)
 
-    const promise = sut.execute({
+    const result = (await sut.execute({
       answerId: answer.id.toString(),
       authorId: 'author-2',
-    })
-    const expectedError = expect(promise).rejects
-    await expectedError.toBeInstanceOf(Error)
-    await expectedError.toThrow('Not allowed')
+    })) as ResultError<NotAllowedError>
+
+    expect(result.success).toBe(false)
+    expect(result.error.type).toEqual('NOT_ALLOWED')
   })
 })

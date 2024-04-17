@@ -21,6 +21,7 @@ module.exports = {
       },
     ],
     'require-jsdoc': ['off'],
+    'new-cap': ['off'],
     camelcase: 'off',
   },
   env: {

@@ -1,13 +1,18 @@
+import { Result, ResultError } from '@/core/result'
 import { Question } from '../../enterprise/entities/question'
 import { IQuestionsRepository } from '../repositories/questions-repository'
+import { ResourceNotFoundError } from './errors/resoure-not-found-error'
 
 type GetQuestionBySlugUseCaseRequest = {
   slug: string
 }
 
-type GetQuestionBySlugUseCaseResponse = {
-  question: Question
-}
+type GetQuestionBySlugUseCaseResponse = Result<
+  {
+    question: Question
+  },
+  ResourceNotFoundError
+>
 
 export class GetQuestionBySlugUseCase {
   constructor(private questionsRepository: IQuestionsRepository) {}
@@ -18,11 +23,12 @@ export class GetQuestionBySlugUseCase {
     const question = await this.questionsRepository.findBySlug(slug)
 
     if (!question) {
-      throw new Error('Question not found')
+      return ResultError(ResourceNotFoundError('Question not found'))
     }
 
     return {
-      question,
+      success: true,
+      value: { question },
     }
   }
 }

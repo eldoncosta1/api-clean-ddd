@@ -1,15 +1,21 @@
+import { Result, ResultError } from '@/core/result'
 import { Question } from '@/domain/forum/enterprise/entities/question'
 import { IAnswersRepository } from '../repositories/answers-repository'
 import { IQuestionsRepository } from '../repositories/questions-repository'
+import { NotAllowedError } from './errors/not-allowed-error'
+import { ResourceNotFoundError } from './errors/resoure-not-found-error'
 
 type ChooseQuestionBestAnswerUseCaseRequest = {
   answerId: string
   authorId: string
 }
 
-type ChooseQuestionBestAnswerResponse = {
-  question: Question
-}
+type ChooseQuestionBestAnswerResponse = Result<
+  {
+    question: Question
+  },
+  ResourceNotFoundError | NotAllowedError
+>
 
 export class ChooseQuestionBestAnswerUseCase {
   constructor(
@@ -24,7 +30,7 @@ export class ChooseQuestionBestAnswerUseCase {
     const answer = await this.answersRepository.findById(answerId)
 
     if (!answer) {
-      throw new Error('Answer not found')
+      return ResultError(ResourceNotFoundError('Answer not found'))
     }
 
     const question = await this.questionsRepository.findById(
@@ -32,11 +38,11 @@ export class ChooseQuestionBestAnswerUseCase {
     )
 
     if (!question) {
-      throw new Error('Question not found')
+      return ResultError(ResourceNotFoundError('Question not found'))
     }
 
     if (authorId !== question.authorId.toString()) {
-      throw new Error('Not allowed')
+      return ResultError(NotAllowedError('Not allowed'))
     }
 
     question.bestAnswerId = answer.id
@@ -44,7 +50,8 @@ export class ChooseQuestionBestAnswerUseCase {
     await this.questionsRepository.save(question)
 
     return {
-      question,
+      success: true,
+      value: { question },
     }
   }
 }

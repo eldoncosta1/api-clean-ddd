@@ -1,4 +1,6 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { ResultError } from '@/core/result'
+import { ResourceNotFoundError } from '@/domain/forum/application/use-cases/errors/resoure-not-found-error'
 import { makeAnswerComment } from 'test/factories/make-answer-comment'
 import { InMemoryAnswerCommentsRepository } from 'test/repositories/in-memory-answer-comments-repository'
 import { DeleteAnswerCommentsUseCase } from './delete-answer-comment'
@@ -32,13 +34,13 @@ describe('Delete Answer Comment Usecase', () => {
 
     await inMemoryAnswerCommentsRepository.create(answerComment)
 
-    const promise = sut.execute({
+    const result = (await sut.execute({
       answerCommentId: answerComment.id.toString(),
       authorId: 'author-2',
-    })
+    })) as ResultError<ResourceNotFoundError>
 
-    const expectedError = expect(promise).rejects
-    await expectedError.toBeInstanceOf(Error)
-    await expectedError.toThrow('Not allowed')
+    expect(result.success).toBe(false)
+    expect(result.error.type).toEqual('NOT_ALLOWED')
+    expect(result.error.message).toEqual('Not allowed')
   })
 })

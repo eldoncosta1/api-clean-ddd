@@ -1,6 +1,8 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { ResultSuccess } from '@/core/result'
 import { makeAnswerComment } from 'test/factories/make-answer-comment'
 import { InMemoryAnswerCommentsRepository } from 'test/repositories/in-memory-answer-comments-repository'
+import { AnswerComment } from '../../enterprise/entities/answer-comment'
 import { FetchAnswerCommentsUseCase } from './fetch-answer-comments'
 
 let inMemoryAnswerCommentsRepository: InMemoryAnswerCommentsRepository
@@ -25,12 +27,14 @@ describe('Fetch Answer Comments Usecase', () => {
       makeAnswerComment({ answerId: new UniqueEntityID('answer-1') }),
     )
 
-    const { answerComments } = await sut.execute({
+    const result = (await sut.execute({
       answerId: 'answer-1',
       page: 1,
-    })
+    })) as ResultSuccess<{
+      answerComments: AnswerComment[]
+    }>
 
-    expect(answerComments).toHaveLength(3)
+    expect(result.value.answerComments).toHaveLength(3)
   })
 
   it('should be able to fetch paginated answer comments', async () => {
@@ -40,11 +44,13 @@ describe('Fetch Answer Comments Usecase', () => {
       )
     }
 
-    const { answerComments } = await sut.execute({
+    const result = (await sut.execute({
       answerId: 'answer-1',
       page: 2,
-    })
+    })) as ResultSuccess<{
+      answerComments: AnswerComment[]
+    }>
 
-    expect(answerComments).toHaveLength(2)
+    expect(result.value.answerComments).toHaveLength(2)
   })
 })

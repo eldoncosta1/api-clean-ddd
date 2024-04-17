@@ -1,5 +1,7 @@
+import { ResultSuccess } from '@/core/result'
 import { makeQuestion } from 'test/factories/make-question'
 import { InMemoryQuestionsRepository } from 'test/repositories/in-memory-questions-repository'
+import { Question } from '../../enterprise/entities/question'
 import { FetchRecentQuestionsUseCase } from './fetch-recent-questions'
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository
@@ -22,9 +24,11 @@ describe('Fetch Recent Questions Usecase', () => {
       makeQuestion({ createdAt: new Date(2022, 0, 23).toUTCString() }),
     )
 
-    const { questions } = await sut.execute({ page: 1 })
+    const result = (await sut.execute({ page: 1 })) as ResultSuccess<{
+      questions: Question[]
+    }>
 
-    expect(questions).toEqual([
+    expect(result.value.questions).toEqual([
       expect.objectContaining({
         createdAt: new Date(2022, 0, 23).toUTCString(),
       }),
@@ -42,8 +46,10 @@ describe('Fetch Recent Questions Usecase', () => {
       await inMemoryQuestionsRepository.create(makeQuestion())
     }
 
-    const { questions } = await sut.execute({ page: 2 })
+    const result = (await sut.execute({ page: 2 })) as ResultSuccess<{
+      questions: Question[]
+    }>
 
-    expect(questions).toHaveLength(2)
+    expect(result.value.questions).toHaveLength(2)
   })
 })

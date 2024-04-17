@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "vitest run",
     "test:unit": "vitest run --project unit-tests",
     "test:unit:watch": "vitest --project unit-tests",
     "lint": "eslint src --ext .ts",

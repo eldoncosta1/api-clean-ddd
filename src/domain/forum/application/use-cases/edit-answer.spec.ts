@@ -1,7 +1,9 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { ResultError } from '@/core/result'
 import { makeAnswer } from 'test/factories/make-answer'
 import { InMemoryAnswersRepository } from 'test/repositories/in-memory-answers-repository'
 import { EditAnswerUseCase } from './edit-answer'
+import { NotAllowedError } from './errors/not-allowed-error'
 
 let inMemoryAnswersRepository: InMemoryAnswersRepository
 let sut: EditAnswerUseCase
@@ -41,14 +43,13 @@ describe('Edit Answer Usecase', () => {
     )
     await inMemoryAnswersRepository.create(newAnswer)
 
-    const promise = sut.execute({
+    const result = (await sut.execute({
       authorId: 'author-2',
       answerId: newAnswer.id.toString(),
       content: 'Conteudo teste',
-    })
+    })) as ResultError<NotAllowedError>
 
-    const expectedError = expect(promise).rejects
-    await expectedError.toBeInstanceOf(Error)
-    await expectedError.toThrow('Not allowed')
+    expect(result.success).toBe(false)
+    expect(result.error.type).toEqual('NOT_ALLOWED')
   })
 })

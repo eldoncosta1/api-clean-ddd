@@ -1,3 +1,4 @@
+import { Result } from '@/core/result'
 import { AnswerComment } from '../../enterprise/entities/answer-comment'
 import { IAnswerCommentsRepository } from '../repositories/answer-comments-repository'
 
@@ -6,9 +7,12 @@ type FetchAnswerCommentsUseCaseRequest = {
   page: number
 }
 
-type FetchAnswerCommentsUseCaseResponse = {
-  answerComments: AnswerComment[]
-}
+type FetchAnswerCommentsUseCaseResponse = Result<
+  {
+    answerComments: AnswerComment[]
+  },
+  null
+>
 
 export class FetchAnswerCommentsUseCase {
   constructor(private answerCommentsRepository: IAnswerCommentsRepository) {}
@@ -23,7 +27,8 @@ export class FetchAnswerCommentsUseCase {
       })
 
     return {
-      answerComments,
+      success: true,
+      value: { answerComments },
     }
   }
 }

@@ -1,3 +1,4 @@
+import { Result } from '@/core/result'
 import { Answer } from '@/domain/forum/enterprise/entities/answer'
 import { IAnswersRepository } from '../repositories/answers-repository'
 
@@ -6,9 +7,12 @@ type FetchQuestionAnswersUseCaseRequest = {
   page: number
 }
 
-type FetchQuestionAnswersUseCaseResponse = {
-  answers: Answer[]
-}
+type FetchQuestionAnswersUseCaseResponse = Result<
+  {
+    answers: Answer[]
+  },
+  null
+>
 
 export class FetchQuestionAnswersUseCase {
   constructor(private answersRepository: IAnswersRepository) {}
@@ -23,7 +27,8 @@ export class FetchQuestionAnswersUseCase {
     )
 
     return {
-      answers,
+      success: true,
+      value: { answers },
     }
   }
 }

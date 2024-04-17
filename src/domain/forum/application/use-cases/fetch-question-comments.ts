@@ -1,3 +1,4 @@
+import { Result } from '@/core/result'
 import { QuestionComment } from '../../enterprise/entities/question-comment'
 import { IQuestionCommentsRepository } from '../repositories/question-comments-repository'
 
@@ -6,9 +7,12 @@ type FetchQuestionCommentsUseCaseRequest = {
   page: number
 }
 
-type FetchQuestionCommentsUseCaseResponse = {
-  questionComments: QuestionComment[]
-}
+type FetchQuestionCommentsUseCaseResponse = Result<
+  {
+    questionComments: QuestionComment[]
+  },
+  null
+>
 
 export class FetchQuestionCommentsUseCase {
   constructor(
@@ -25,7 +29,8 @@ export class FetchQuestionCommentsUseCase {
       })
 
     return {
-      questionComments,
+      success: true,
+      value: { questionComments },
     }
   }
 }

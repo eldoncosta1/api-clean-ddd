@@ -1,7 +1,9 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { ResultError } from '@/core/result'
 import { makeAnswer } from 'test/factories/make-answer'
 import { InMemoryAnswersRepository } from 'test/repositories/in-memory-answers-repository'
 import { DeleteAnswerUseCase } from './delete-answer'
+import { NotAllowedError } from './errors/not-allowed-error'
 
 let inMemoryAnswersRepository: InMemoryAnswersRepository
 let sut: DeleteAnswerUseCase
@@ -38,13 +40,12 @@ describe('Delete Answer Usecase', () => {
     )
     await inMemoryAnswersRepository.create(newAnswer)
 
-    const promise = sut.execute({
+    const result = (await sut.execute({
       answerId: 'answer-1',
       authorId: 'author-2',
-    })
+    })) as ResultError<NotAllowedError>
 
-    const expectedError = expect(promise).rejects
-    await expectedError.toBeInstanceOf(Error)
-    await expectedError.toThrow('Not allowed')
+    expect(result.success).toBe(false)
+    expect(result.error.type).toEqual('NOT_ALLOWED')
   })
 })

@@ -1,7 +1,9 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { ResultError } from '@/core/result'
 import { makeQuestionComment } from 'test/factories/make-question-comment'
 import { InMemoryQuestionCommentsRepository } from 'test/repositories/in-memory-question-comments-repository'
 import { DeleteQuestionCommentsUseCase } from './delete-question-comment'
+import { NotAllowedError } from './errors/not-allowed-error'
 
 let inMemoryQuestionCommentsRepository: InMemoryQuestionCommentsRepository
 let sut: DeleteQuestionCommentsUseCase
@@ -33,13 +35,12 @@ describe('Delete Question Comment Usecase', () => {
 
     await inMemoryQuestionCommentsRepository.create(questionComment)
 
-    const promise = sut.execute({
+    const result = (await sut.execute({
       questionCommentId: questionComment.id.toString(),
       authorId: 'author-2',
-    })
+    })) as ResultError<NotAllowedError>
 
-    const expectedError = expect(promise).rejects
-    await expectedError.toBeInstanceOf(Error)
-    await expectedError.toThrow('Not allowed')
+    expect(result.success).toBe(false)
+    expect(result.error.type).toEqual('NOT_ALLOWED')
   })
 })

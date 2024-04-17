@@ -1,4 +1,5 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Result } from '@/core/result'
 import { Answer } from '@/domain/forum/enterprise/entities/answer'
 import { IAnswersRepository } from '../repositories/answers-repository'
 
@@ -8,9 +9,12 @@ type AnswerQuestionUseCaseRequest = {
   content: string
 }
 
-type AnswerQuestionResponse = {
-  answer: Answer
-}
+export type AnswerQuestionResponse = Result<
+  {
+    answer: Answer
+  },
+  null
+>
 
 export class AnswerQuestionUseCase {
   constructor(private answersRepository: IAnswersRepository) {}
@@ -28,6 +32,9 @@ export class AnswerQuestionUseCase {
 
     await this.answersRepository.create(answer)
 
-    return { answer }
+    return {
+      success: true,
+      value: { answer },
+    }
   }
 }

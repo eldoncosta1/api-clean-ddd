@@ -1,3 +1,5 @@
+import { ResultSuccess } from '@/core/result'
+import { Answer } from '@/domain/forum/enterprise/entities/answer'
 import { InMemoryAnswersRepository } from 'test/repositories/in-memory-answers-repository'
 import { AnswerQuestionUseCase } from './answer-question'
 
@@ -11,13 +13,15 @@ describe('Answer Question Usecase', () => {
   })
 
   it('should be able to answer a question', async () => {
-    const { answer } = await sut.execute({
+    const result = (await sut.execute({
       questionId: '1',
       instructorId: '1',
       content: 'Conteúdo da pergunta',
-    })
+    })) as ResultSuccess<{
+      answer: Answer
+    }>
 
-    expect(answer.id).toBeTruthy()
-    expect(inMemoryAnswersRepository.items[0].id).toEqual(answer.id)
+    expect(result.success).toBe(true)
+    expect(inMemoryAnswersRepository.items[0]).toEqual(result.value.answer)
   })
 })
