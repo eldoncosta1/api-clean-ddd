@@ -1,7 +1,7 @@
 import { Result, ResultError } from '@/core/result'
+import { ResourceNotFoundError } from '../../../../core/errors/resoure-not-found-error'
 import { Question } from '../../enterprise/entities/question'
 import { IQuestionsRepository } from '../repositories/questions-repository'
-import { ResourceNotFoundError } from './errors/resoure-not-found-error'
 
 type GetQuestionBySlugUseCaseRequest = {
   slug: string

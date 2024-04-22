@@ -1,12 +1,12 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Result, ResultError } from '@/core/result'
 import { Answer } from '@/domain/forum/enterprise/entities/answer'
+import { NotAllowedError } from '../../../../core/errors/not-allowed-error'
+import { ResourceNotFoundError } from '../../../../core/errors/resoure-not-found-error'
 import { AnswerAttachment } from '../../enterprise/entities/answer-attachment'
 import { AnswerAttachmentList } from '../../enterprise/entities/answer-attachment-list'
 import { IAnswerAttachmentsRepository } from '../repositories/answer-attachments-repository'
 import { IAnswersRepository } from '../repositories/answers-repository'
-import { NotAllowedError } from './errors/not-allowed-error'
-import { ResourceNotFoundError } from './errors/resoure-not-found-error'
 
 type EditAnswerUseCaseRequest = {
   authorId: string

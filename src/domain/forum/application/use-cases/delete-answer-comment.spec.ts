@@ -1,6 +1,6 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { ResourceNotFoundError } from '@/core/errors/resoure-not-found-error'
 import { ResultError } from '@/core/result'
-import { ResourceNotFoundError } from '@/domain/forum/application/use-cases/errors/resoure-not-found-error'
 import { makeAnswerComment } from 'test/factories/make-answer-comment'
 import { InMemoryAnswerCommentsRepository } from 'test/repositories/in-memory-answer-comments-repository'
 import { DeleteAnswerCommentsUseCase } from './delete-answer-comment'

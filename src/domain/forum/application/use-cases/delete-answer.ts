@@ -1,7 +1,7 @@
 import { Result, ResultError } from '@/core/result'
+import { NotAllowedError } from '../../../../core/errors/not-allowed-error'
+import { ResourceNotFoundError } from '../../../../core/errors/resoure-not-found-error'
 import { IAnswersRepository } from '../repositories/answers-repository'
-import { NotAllowedError } from './errors/not-allowed-error'
-import { ResourceNotFoundError } from './errors/resoure-not-found-error'
 
 type DeleteAnswerUseCaseRequest = {
   answerId: string

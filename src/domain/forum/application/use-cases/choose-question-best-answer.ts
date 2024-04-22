@@ -1,9 +1,9 @@
 import { Result, ResultError } from '@/core/result'
 import { Question } from '@/domain/forum/enterprise/entities/question'
+import { NotAllowedError } from '../../../../core/errors/not-allowed-error'
+import { ResourceNotFoundError } from '../../../../core/errors/resoure-not-found-error'
 import { IAnswersRepository } from '../repositories/answers-repository'
 import { IQuestionsRepository } from '../repositories/questions-repository'
-import { NotAllowedError } from './errors/not-allowed-error'
-import { ResourceNotFoundError } from './errors/resoure-not-found-error'
 
 type ChooseQuestionBestAnswerUseCaseRequest = {
   answerId: string

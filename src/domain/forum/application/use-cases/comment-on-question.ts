@@ -1,9 +1,9 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Result, ResultError } from '@/core/result'
+import { ResourceNotFoundError } from '../../../../core/errors/resoure-not-found-error'
 import { QuestionComment } from '../../enterprise/entities/question-comment'
 import { IQuestionCommentsRepository } from '../repositories/question-comments-repository'
 import { IQuestionsRepository } from '../repositories/questions-repository'
-import { ResourceNotFoundError } from './errors/resoure-not-found-error'
 
 type CommentOnQuestionUseCaseRequest = {
   authorId: string

@@ -1,12 +1,12 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Result, ResultError } from '@/core/result'
 import { Question } from '@/domain/forum/enterprise/entities/question'
+import { NotAllowedError } from '../../../../core/errors/not-allowed-error'
+import { ResourceNotFoundError } from '../../../../core/errors/resoure-not-found-error'
 import { QuestionAttachment } from '../../enterprise/entities/question-attachment'
 import { QuestionAttachmentList } from '../../enterprise/entities/question-attachment-list'
 import { IQuestionAttachmentsRepository } from '../repositories/question-attachments-repository'
 import { IQuestionsRepository } from '../repositories/questions-repository'
-import { NotAllowedError } from './errors/not-allowed-error'
-import { ResourceNotFoundError } from './errors/resoure-not-found-error'
 
 type EditQuestionUseCaseRequest = {
   authorId: string

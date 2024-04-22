@@ -1,6 +1,6 @@
+import { NotAllowedError } from '@/core/errors/not-allowed-error'
+import { ResourceNotFoundError } from '@/core/errors/resoure-not-found-error'
 import { Result, ResultError } from '@/core/result'
-import { NotAllowedError } from '@/domain/forum/application/use-cases/errors/not-allowed-error'
-import { ResourceNotFoundError } from '@/domain/forum/application/use-cases/errors/resoure-not-found-error'
 import { IAnswerCommentsRepository } from '../repositories/answer-comments-repository'
 
 type DeleteAnswerCommentsUseCaseRequest = {
